@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "660898327581",
+    "project_id": "blinkit-18264",
+    "storage_bucket": "blinkit-18264.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660898327581:android:e25633dbd8aa1219ceeaf4",
+        "android_client_info": {
+          "package_name": "com.example.dontblink"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2Yb4hnk7-rNX96LPb-jADEDIkp_UDXac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
