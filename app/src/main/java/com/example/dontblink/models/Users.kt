@@ -1,8 +1,7 @@
 package com.example.dontblink.models
 
 data class Users(
-    val uid:String?=null,
+    val uid : String?=null,
     val userPhoneNumber: String? =null,
-    val userAddress:String?=null
-
+    val userAddress:String?=null,
 )

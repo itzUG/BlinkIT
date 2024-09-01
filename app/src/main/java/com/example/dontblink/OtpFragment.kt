@@ -1,5 +1,6 @@
 package com.example.dontblink
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.dontblink.activity.UserMainActivity
 import com.example.dontblink.databinding.FragmentOtpBinding
 import com.example.dontblink.models.Users
 import com.example.dontblink.viewModel.authViewModel
@@ -52,12 +54,15 @@ class OtpFragment : Fragment() {
     }
 
     private fun verifyOtp(otp:String) {
-        viewModel.signInWithPhoneAuthCredential(otp,userNumber)
+        val user = Users(uid = Utils.getCurrentUserId() , userPhoneNumber = userNumber , userAddress = null)
+        viewModel.signInWithPhoneAuthCredential(otp,userNumber,user)
         lifecycleScope.launch {
             viewModel.iSignedSuccesfully.collect{
                 if(it){
                     Utils.hideDialog()
                     Utils.showToast(requireContext(),"Logged IN sucessfully")
+                    startActivity(Intent(requireActivity(),UserMainActivity::class.java))
+                    requireActivity().finish()
                 }
             }
         }

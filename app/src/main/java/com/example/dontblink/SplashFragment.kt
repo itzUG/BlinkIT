@@ -1,5 +1,6 @@
 package com.example.dontblink
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -9,13 +10,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.dontblink.activity.UserMainActivity
 import com.example.dontblink.databinding.FragmentSplashBinding
+import com.example.dontblink.viewModel.authViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 
 class SplashFragment : Fragment() {
 
     private lateinit var binding: FragmentSplashBinding
+    private val viewModel : authViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -23,6 +31,18 @@ class SplashFragment : Fragment() {
         binding = FragmentSplashBinding.inflate(layoutInflater)
         statusBarColour()
         Handler(Looper.getMainLooper()).postDelayed({
+
+            lifecycleScope.launch {
+                viewModel.isCurrentUser.collect{
+                    if(it){
+                        startActivity(Intent(requireActivity(),UserMainActivity::class.java))
+                        requireActivity().finish()
+                    }else{
+                        findNavController().navigate(R.id.action_splashFragment_to_signInFragment)
+                    }
+                }
+            }
+
             findNavController().navigate(R.id.action_splashFragment_to_signInFragment)
         },3000)
         return binding.root

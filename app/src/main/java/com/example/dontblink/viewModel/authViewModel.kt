@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.dontblink.Utils
 import com.example.dontblink.models.Users
 import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
@@ -21,6 +22,17 @@ class authViewModel : ViewModel() {
 
     private val _isSignedInSuccesfully = MutableStateFlow(false)
     val iSignedSuccesfully = _isSignedInSuccesfully
+
+    private val _isACurrentUser = MutableStateFlow(false)
+    val isCurrentUser = _isACurrentUser
+
+    init {
+
+        Utils.getAuthInstance().currentUser?.let {
+            _isACurrentUser.value = true
+        }
+
+    }
 
     fun sendOtp(userNumber: String,activity: Activity){
 
@@ -50,13 +62,13 @@ class authViewModel : ViewModel() {
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
-    fun signInWithPhoneAuthCredential(otp: String, userNumber: String  ) {
+    fun signInWithPhoneAuthCredential(otp: String, userNumber: String, user: Users) {
         val credential = PhoneAuthProvider.getCredential(_verifiactionId.value.toString(), otp )
         Utils.getAuthInstance().signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    FirebaseDatabase.getInstance().getReference("AllUsers").child("Users").child(user.uid!!).setValue(user)
                     _isSignedInSuccesfully.value = true
-
                 } else {
 
                 }
